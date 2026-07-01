@@ -86,7 +86,7 @@ async function init() {
 
   onAuthStateChanged(state.auth, (user) => {
     if (user && !user.isAnonymous) {
-      window.location.replace("/app/settings");
+      window.location.replace("/settings");
       return;
     }
     refreshAccountState(user, {});

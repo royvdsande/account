@@ -125,7 +125,7 @@ export function _showSettingsTabDirect(tabName) {
 
 export function showSettingsTab(tabName) {
   const safeTab = SETTINGS_TABS.includes(tabName) ? tabName : "profile";
-  const url = `/app/settings${safeTab !== "profile" ? `?tab=${safeTab}` : ""}`;
+  const url = `/settings${safeTab !== "profile" ? `?tab=${safeTab}` : ""}`;
   window.history.replaceState({}, "", url);
   _showSettingsTabDirect(safeTab);
 }

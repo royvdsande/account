@@ -18,9 +18,9 @@ function getSettingsTabFromUrl() {
 }
 
 export const PAGE_PATHS = {
-  overview: "/app/settings",
-  billing: "/app/settings?tab=billing",
-  settings: "/app/settings",
+  overview: "/settings",
+  billing: "/settings?tab=billing",
+  settings: "/settings",
 };
 
 export function startProgress() {

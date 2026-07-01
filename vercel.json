@@ -19,10 +19,15 @@
       ]
     }
   ],
+  "redirects": [
+    { "source": "/app/settings", "destination": "/settings", "permanent": false },
+    { "source": "/app/billing", "destination": "/settings?tab=billing", "permanent": false }
+  ],
   "rewrites": [
     { "source": "/pricing", "destination": "/pricing.html" },
     { "source": "/auth/login", "destination": "/auth/login.html" },
     { "source": "/auth/signup", "destination": "/auth/signup.html" },
+    { "source": "/settings", "destination": "/app/index.html" },
     { "source": "/app", "destination": "/app/index.html" },
     { "source": "/app/:path*", "destination": "/app/index.html" }
   ]

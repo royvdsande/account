@@ -53,7 +53,7 @@ export function bindEvents() {
   els.routeButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const target = button.dataset.route;
-      navigate(PAGE_PATHS[target] || "/app/settings");
+      navigate(PAGE_PATHS[target] || "/settings");
     });
   });
 
@@ -134,13 +134,12 @@ export function bindEvents() {
 
   els.ctxOpenHomepage?.addEventListener("click", () => {
     els.dashboardAccountMenu?.classList.remove("open");
-    sessionStorage.setItem("bypass_homepage_redirect", "1");
     window.location.href = "/";
   });
 
   els.modalDashboardBtn?.addEventListener("click", () => {
     closeAccountModal();
-    navigate(state.currentUser ? "/app/settings" : "/auth/login");
+    navigate(state.currentUser ? "/settings" : "/auth/login");
   });
 
   els.modalLogoutBtn?.addEventListener("click", async () => {

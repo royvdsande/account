@@ -69,7 +69,7 @@ export async function signUpWithEmailPassword(name, email, password, statusEl, b
     await updateProfile(result.user, { displayName: name });
     await sendEmailVerification(result.user);
     state.currentUser = result.user;
-    navigate("/app/settings");
+    navigate("/settings");
   } catch (error) {
     setStatus(statusEl, getFirebaseErrorMessage(error.code), "error");
   } finally {
@@ -94,7 +94,7 @@ export async function signInWithEmailPassword(email, password, statusEl, button)
   try {
     const result = await signInWithEmailAndPassword(state.auth, email, password);
     state.currentUser = result.user;
-    navigate("/app/settings");
+    navigate("/settings");
   } catch (error) {
     setStatus(statusEl, getFirebaseErrorMessage(error.code), "error");
   } finally {
@@ -125,7 +125,7 @@ export async function signInWithGoogle(statusEl, button) {
     const result = await signInWithPopup(state.auth, provider);
     state.currentUser = result.user;
     loginSucceeded = true;
-    navigate("/app/settings");
+    navigate("/settings");
   } catch (error) {
     const msg = getFirebaseErrorMessage(error.code);
     if (msg) setStatus(statusEl, msg, "error");
@@ -157,7 +157,7 @@ export async function completeMagicLinkSignIn() {
     state.currentUser = result.user;
     localStorage.removeItem(storedEmailKey);
     window.history.replaceState({}, document.title, window.location.pathname);
-    navigate("/app/settings");
+    navigate("/settings");
   } catch (error) {
     setStatus(els.signinStatus, getFirebaseErrorMessage(error.code) || "Magic link sign in failed.", "error");
     window.location.replace("/auth/login");
@@ -173,7 +173,7 @@ export async function refreshAccountState(user, options = {}) {
     state.isPremiumUser = hasLocalPlusStatus();
     state.currentPlanLabel = state.isPremiumUser ? "Premium" : "Free";
     updateAccountSurfaces();
-    if (window.location.pathname.startsWith("/app")) {
+    if (window.location.pathname.startsWith("/app") || window.location.pathname === "/settings") {
       window.location.replace("/auth/login");
     }
     return;
@@ -191,6 +191,6 @@ export async function refreshAccountState(user, options = {}) {
   updateAccountSurfaces();
 
   if (options.showDashboard) {
-    navigate("/app/settings");
+    navigate("/settings");
   }
 }

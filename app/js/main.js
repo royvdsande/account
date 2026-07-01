@@ -7,8 +7,6 @@ import { refreshAccountState, completeMagicLinkSignIn } from "./auth.js";
 import { updateAccountSurfaces } from "./dashboard.js";
 import { bindEvents } from "./events.js";
 
-sessionStorage.removeItem("bypass_homepage_redirect");
-
 let _routeInitialized = false;
 
 async function initAuth() {

@@ -79,8 +79,8 @@ export async function startCheckout(statusTarget = els.pricingStatus, planId = n
   }
 
   try {
-    const successUrl = `${window.location.origin}/app/settings?tab=billing&checkout=success`;
-    const cancelUrl = `${window.location.origin}/app/settings?tab=billing&checkout=cancel`;
+    const successUrl = `${window.location.origin}/settings?tab=billing&checkout=success`;
+    const cancelUrl = `${window.location.origin}/settings?tab=billing&checkout=cancel`;
 
     const sessionData = {
       mode: "subscription",
