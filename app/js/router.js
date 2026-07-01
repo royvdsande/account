@@ -1,21 +1,26 @@
 import { state } from "./state.js";
 import { els } from "./elements.js";
-import { closeMobileMenus, closeSidebar, closeAccountModal } from "./ui.js";
+import { closeMobileMenus, closeAccountModal } from "./ui.js";
 
 let _progressTimer = null;
 const _progressEl = document.getElementById("progress-bar");
 
+const SETTINGS_TABS = ["profile", "security", "billing"];
+
 function getNormalizedAppPath() {
-  const path = window.location.pathname.replace(/\/$/, "") || "/app";
-  return path;
+  return window.location.pathname.replace(/\/$/, "") || "/app";
+}
+
+function getSettingsTabFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const tab = params.get("tab") || "profile";
+  return SETTINGS_TABS.includes(tab) ? tab : "profile";
 }
 
 export const PAGE_PATHS = {
-  overview: "/app/",
-  plan: "/app/plan",
+  overview: "/app/settings",
   billing: "/app/settings?tab=billing",
   settings: "/app/settings",
-  ai: "/app/ai",
 };
 
 export function startProgress() {
@@ -24,7 +29,9 @@ export function startProgress() {
   _progressEl.classList.remove("finishing");
   _progressEl.style.width = "0%";
   _progressEl.classList.add("running");
-  requestAnimationFrame(() => requestAnimationFrame(() => { _progressEl.style.width = "72%"; }));
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    _progressEl.style.width = "72%";
+  }));
 }
 
 export function finishProgress() {
@@ -47,42 +54,12 @@ export function navigate(path, { showProgress = true } = {}) {
 
 export function preInitRoute() {
   startProgress();
-  const path = getNormalizedAppPath();
-  const tab  = new URLSearchParams(window.location.search).get("tab");
-
-  // /app/billing redirects to settings billing tab
-  const viewName =
-    path === "/app/billing"  ? "settings" :
-    path === "/app/settings" ? "settings" :
-    path === "/app/plan"     ? "plan"     :
-    path === "/app/ai"       ? "ai"       : "overview";
-
-  const settingsTab = path === "/app/billing" ? "billing" : (tab || "profile");
-
-  const tabLabels = { profile: "Profile", security: "Security", billing: "Billing", credits: "Credits" };
-  const settingsLabel = tabLabels[settingsTab] || "Settings";
-  const labels = { settings: settingsLabel, plan: "My Plan", ai: "AI Chatbot" };
-  const label  = labels[viewName] || "Home";
-
-  const topbarLabel = document.getElementById("dashboard-topbar-label");
-  if (topbarLabel) topbarLabel.textContent = label;
-  document.title = `FitFlow | ${label}`;
-
-  document.querySelectorAll("#sidebar-dash [data-dashboard-view]").forEach((btn) => {
-    if (viewName === "settings" && btn.dataset.dashboardView === "settings") {
-      btn.classList.toggle("active", btn.dataset.settingsTab === settingsTab);
-    } else {
-      btn.classList.toggle(
-        "active",
-        btn.dataset.dashboardView === viewName && btn.dataset.dashboardView !== "settings"
-      );
-    }
-  });
+  document.title = `Account | ${getSettingsTabFromUrl()[0].toUpperCase()}${getSettingsTabFromUrl().slice(1)}`;
 }
 
 export function renderRoute() {
   const path = getNormalizedAppPath();
-  const tab = new URLSearchParams(window.location.search).get("tab");
+  const tab = path === "/app/billing" ? "billing" : getSettingsTabFromUrl();
 
   import("./dashboard.js").then(({ showDashboardView }) => {
     if (!state.currentUser) {
@@ -91,29 +68,11 @@ export function renderRoute() {
     }
 
     state.currentPageId = "page-dashboard";
-    els.pages?.forEach?.((p) => p.classList.toggle("active", p.id === "page-dashboard"));
+    els.pages?.forEach?.((page) => page.classList.toggle("active", page.id === "page-dashboard"));
     closeMobileMenus();
-    closeSidebar();
     closeAccountModal();
     window.scrollTo(0, 0);
 
-    if (path === "/app/settings") {
-      showDashboardView("settings", tab || "profile");
-      return;
-    }
-    if (path === "/app/plan") {
-      showDashboardView("plan");
-      return;
-    }
-    if (path === "/app/billing") {
-      // Billing is now inside settings
-      showDashboardView("settings", "billing");
-      return;
-    }
-    if (path === "/app/ai") {
-      showDashboardView("ai");
-      return;
-    }
-    showDashboardView("overview");
+    showDashboardView("settings", tab);
   });
 }

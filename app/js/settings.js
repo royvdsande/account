@@ -1,10 +1,7 @@
 import {
   updateProfile,
-  sendPasswordResetEmail,
   deleteUser,
   GoogleAuthProvider,
-  linkWithPopup,
-  unlink,
   updatePassword,
   reauthenticateWithCredential,
   reauthenticateWithPopup,
@@ -13,7 +10,6 @@ import {
 import { state } from "./state.js";
 import { els } from "./elements.js";
 import { setStatus, setLoadingState, getFirebaseErrorMessage } from "./utils.js";
-import { navigate } from "./router.js";
 import { updateAccountSurfaces } from "./dashboard.js";
 
 let _reauthCallback = null;
@@ -57,20 +53,6 @@ export async function updateUserName(name, statusEl, button) {
     await updateProfile(state.currentUser, { displayName: name });
     updateAccountSurfaces();
     setStatus(statusEl, "Name updated successfully.", "success");
-  } catch (error) {
-    setStatus(statusEl, getFirebaseErrorMessage(error.code), "error");
-  } finally {
-    setLoadingState(button, false);
-  }
-}
-
-export async function sendPasswordReset(statusEl, button) {
-  if (!state.currentUser?.email) { setStatus(statusEl, "No email address found.", "error"); return; }
-  setLoadingState(button, true, "Sending...");
-  setStatus(statusEl, "", "info");
-  try {
-    await sendPasswordResetEmail(state.auth, state.currentUser.email);
-    setStatus(statusEl, `Password reset email sent to ${state.currentUser.email}.`, "success");
   } catch (error) {
     setStatus(statusEl, getFirebaseErrorMessage(error.code), "error");
   } finally {
@@ -166,35 +148,6 @@ export async function updateUserPassword(currentPassword, newPassword, statusEl,
         ? "Current password is incorrect."
         : getFirebaseErrorMessage(error.code);
     setStatus(statusEl, msg, "error");
-  } finally {
-    setLoadingState(button, false);
-  }
-}
-
-export async function toggleGoogleLink(statusEl, button) {
-  if (!state.currentUser) return;
-  const isLinked = button.dataset.linked === "true";
-  if (isLinked) {
-    const hasPassword = state.currentUser.providerData?.some((p) => p.providerId === "password");
-    if (!hasPassword) {
-      setStatus(statusEl, "Set a password before unlinking Google.", "error");
-      return;
-    }
-  }
-  setLoadingState(button, true, isLinked ? "Unlinking..." : "Connecting...");
-  setStatus(statusEl, "", "info");
-  try {
-    if (isLinked) {
-      await unlink(state.currentUser, "google.com");
-      setStatus(statusEl, "Google account unlinked.", "success");
-    } else {
-      const provider = new GoogleAuthProvider();
-      await linkWithPopup(state.currentUser, provider);
-      setStatus(statusEl, "Google account linked.", "success");
-    }
-  } catch (error) {
-    const msg = getFirebaseErrorMessage(error.code);
-    if (msg) setStatus(statusEl, msg, "error");
   } finally {
     setLoadingState(button, false);
   }

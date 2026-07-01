@@ -48,17 +48,23 @@ export async function startCheckout(statusTarget = els.pricingStatus, planId = n
     return;
   }
   if (state.isPremiumUser) {
-    setStatus(statusTarget, "Premium is already active on this account.", "success");
+    setStatus(statusTarget, "A subscription is already active on this account.", "success");
     return;
   }
 
   initFirebase();
 
+  if (!state.currentUser) {
+    setStatus(statusTarget, "Sign in to manage billing.", "error");
+    window.setTimeout(() => {
+      window.location.href = "/auth/login";
+    }, 900);
+    return;
+  }
+
   const checkoutButtons = [
     triggerButton,
     els.pricingCheckoutBtn,
-    els.dashboardCheckoutCta,
-    els.dashboardSidebarCheckout,
     els.modalCheckoutBtn,
   ].filter(Boolean);
   checkoutButtons.forEach((button) => setLoadingState(button, true));
@@ -73,31 +79,8 @@ export async function startCheckout(statusTarget = els.pricingStatus, planId = n
   }
 
   try {
-    const { signInAnonymously } = await import("https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js");
-    const wasLoggedIn = state.auth.currentUser && !state.auth.currentUser.isAnonymous;
-
-    if (!state.auth.currentUser) {
-      await signInAnonymously(state.auth);
-    }
-
-    const isOnboarding = window.location.pathname.startsWith("/onboarding");
-    let successUrl, cancelUrl;
-
-    if (wasLoggedIn) {
-      // Already has a real account — go straight to app
-      successUrl = `${window.location.origin}/app/?checkout=success`;
-      cancelUrl = `${window.location.origin}/app/?checkout=cancel`;
-    } else if (isOnboarding) {
-      // Anonymous user from onboarding — send to signup to create/link account
-      successUrl = `${window.location.origin}/auth/signup?checkout=success&link_anonymous=true`;
-      cancelUrl = `${window.location.origin}/onboarding/?checkout=cancel`;
-    } else if (window.location.pathname.startsWith("/app")) {
-      successUrl = `${window.location.origin}/app/?checkout=success`;
-      cancelUrl = `${window.location.origin}/app/?checkout=cancel`;
-    } else {
-      successUrl = `${window.location.origin}/pricing?checkout=success&anonymous=true`;
-      cancelUrl = `${window.location.origin}/pricing?checkout=cancel`;
-    }
+    const successUrl = `${window.location.origin}/app/settings?tab=billing&checkout=success`;
+    const cancelUrl = `${window.location.origin}/app/settings?tab=billing&checkout=cancel`;
 
     const sessionData = {
       mode: "subscription",
@@ -112,7 +95,7 @@ export async function startCheckout(statusTarget = els.pricingStatus, planId = n
       sessionData.customer_email = state.auth.currentUser.email;
     }
 
-    const sessionsRef = collection(state.firestore, "customers", state.auth.currentUser.uid, "checkout_sessions");
+    const sessionsRef = collection(state.firestore, "customers", state.currentUser.uid, "checkout_sessions");
     const docRef = await addDoc(sessionsRef, sessionData);
 
     const unsubscribe = onSnapshot(docRef, (snapshot) => {

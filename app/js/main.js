@@ -2,14 +2,11 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/fi
 import { state, plusLocalKey, initFirebase } from "./state.js";
 import { els } from "./elements.js";
 import { setStatus } from "./utils.js";
-import { navigate, renderRoute, preInitRoute } from "./router.js";
+import { renderRoute, preInitRoute } from "./router.js";
 import { refreshAccountState, completeMagicLinkSignIn } from "./auth.js";
-import { updatePricingCopy, updateAccountSurfaces } from "./dashboard.js";
+import { updateAccountSurfaces } from "./dashboard.js";
 import { bindEvents } from "./events.js";
-import { initSidebarState } from "./ui.js";
 
-// Clear homepage bypass flag — user is back in the dashboard, so the next
-// direct visit to / should redirect to the dashboard again as normal.
 sessionStorage.removeItem("bypass_homepage_redirect");
 
 let _routeInitialized = false;
@@ -28,22 +25,6 @@ async function initAuth() {
       renderRoute();
     }
 
-    // Transfer plan generated during anonymous onboarding to the new account
-    if (user && !user.isAnonymous) {
-      const pendingPlan = localStorage.getItem("ob_pending_plan");
-      if (pendingPlan) {
-        try {
-          const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js");
-          await setDoc(
-            doc(state.firestore, "users", user.uid),
-            { plan: JSON.parse(pendingPlan) },
-            { merge: true }
-          );
-          localStorage.removeItem("ob_pending_plan");
-        } catch {}
-      }
-    }
-
     const params = new URLSearchParams(window.location.search);
     if (params.get("checkout") === "success") {
       if (params.get("anonymous") === "true") {
@@ -51,11 +32,7 @@ async function initAuth() {
       }
       state.isPremiumUser = true;
       state.currentPlanLabel = "Premium";
-      setStatus(
-        els.dashboardStatus,
-        "Checkout voltooid. Je premium-status wordt gesynchroniseerd.",
-        "success"
-      );
+      setStatus(els.dashboardStatus, "Checkout completed. Your subscription is being synced.", "success");
       window.history.replaceState({}, document.title, window.location.pathname);
       await refreshAccountState(user);
     }
@@ -68,8 +45,6 @@ async function initAuth() {
 
 function init() {
   state.currentPageId = "page-dashboard";
-  initSidebarState();
-  updatePricingCopy();
   bindEvents();
   updateAccountSurfaces();
   preInitRoute();

@@ -43,8 +43,6 @@ function bindShellEvents() {
 function bindScrollActiveNav() {
   const sectionMap = [
     { el: document.querySelector("section.hero"), href: "/" },
-    { el: document.getElementById("how-it-works"), href: "#how-it-works" },
-    { el: document.getElementById("features"),     href: "#features" },
   ].filter((s) => s.el);
   if (!sectionMap.length) return;
 
@@ -87,14 +85,14 @@ bindScrollActiveNav();
 onAuthStateChanged(state.auth, (user) => {
   state.currentUser = user && !user.isAnonymous ? user : null;
 
-  // Redirect authenticated users from landing page to dashboard,
+  // Redirect authenticated users from landing page to settings,
   // unless they explicitly navigated here via the "Homepage" button.
   if (isLandingPage && state.currentUser) {
     if (sessionStorage.getItem("bypass_homepage_redirect")) {
       // Keep the flag alive so refreshing the page also skips the redirect.
-      // It will be cleared when the user navigates back to the dashboard.
+      // It will be cleared when the user navigates back to settings.
     } else {
-      window.location.replace("/app/");
+      window.location.replace("/app/settings");
       return;
     }
   }

@@ -2,7 +2,7 @@
 .auth-page { min-height: 100vh; background: var(--gray-50); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
 .auth-logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; margin-bottom: 28px; cursor: pointer; }
 .auth-logo-icon { width: 30px; height: 30px; background: var(--black); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-.auth-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 28px 24px; width: 100%; max-width: 400px; animation: fadeUp .4s ease both; }
+.auth-card { background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-lg); padding: 28px 24px; width: 100%; max-width: 400px; }
 .auth-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 5px; }
 .auth-sub { font-size: 14px; color: var(--gray-500); margin-bottom: 22px; }
 .field { margin-bottom: 14px; }
@@ -49,7 +49,6 @@
   font-size: 13px;
   line-height: 1.4;
   margin-bottom: 4px;
-  animation: fadeUp .18s ease both;
 }
 .toggle-password { color: var(--gray-400); transition: color .12s; }
 .toggle-password:hover { color: var(--gray-600); }
