@@ -3,7 +3,6 @@ import {
   getApps,
   getApp,
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
 import {
   getAuth,
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
@@ -54,11 +53,6 @@ export const state = {
 export function initFirebase() {
   if (!state.firebaseApp) {
     state.firebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
-    try {
-      getAnalytics(state.firebaseApp);
-    } catch {
-      // Analytics not available
-    }
   }
   if (!state.auth) {
     state.auth = getAuth(state.firebaseApp);

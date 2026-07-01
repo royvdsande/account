@@ -2,7 +2,6 @@
   "name": "account-site",
   "version": "1.0.0",
   "description": "A simple static account site with authentication, profile settings, and billing management.",
-  "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

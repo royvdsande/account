@@ -1,8 +1,7 @@
 import { signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 import { state } from "./state.js";
 import { els } from "./elements.js";
-import { navigate, PAGE_PATHS } from "./router.js";
-import { closeMobileMenus, closeAccountModal, toggleAccountMenu } from "./ui.js";
+import { toggleAccountMenu } from "./ui.js";
 import { startCheckout, openBillingPortal } from "./billing.js";
 import { showSettingsTab } from "./dashboard.js";
 import {
@@ -50,17 +49,6 @@ function bindPasswordVisibility() {
 }
 
 export function bindEvents() {
-  els.routeButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const target = button.dataset.route;
-      navigate(PAGE_PATHS[target] || "/settings");
-    });
-  });
-
-  els.mobileMenuLinks.forEach((button) => {
-    button.addEventListener("click", () => closeMobileMenus());
-  });
-
   document.querySelectorAll(".settings-tabs [data-settings-tab]").forEach((button) => {
     button.addEventListener("click", () => showSettingsTab(button.dataset.settingsTab));
   });
@@ -137,27 +125,9 @@ export function bindEvents() {
     window.location.href = "/";
   });
 
-  els.modalDashboardBtn?.addEventListener("click", () => {
-    closeAccountModal();
-    navigate(state.currentUser ? "/settings" : "/auth/login");
-  });
-
-  els.modalLogoutBtn?.addEventListener("click", async () => {
-    if (!state.auth?.currentUser) return;
-    await signOut(state.auth);
-    closeAccountModal();
-    window.location.replace("/");
-  });
-
-  els.accountModalBackdrop?.addEventListener("click", closeAccountModal);
-  els.accountModalClose?.addEventListener("click", closeAccountModal);
-
   document.addEventListener("click", (event) => {
     if (!event.target.closest(".header-user-wrap")) {
       els.dashboardAccountMenu?.classList.remove("open");
-    }
-    if (!event.target.closest(".nav") && !event.target.closest(".mobile-menu")) {
-      closeMobileMenus();
     }
   });
 

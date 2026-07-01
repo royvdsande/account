@@ -1,6 +1,4 @@
 import { state } from "./state.js";
-import { els } from "./elements.js";
-import { closeMobileMenus, closeAccountModal } from "./ui.js";
 
 let _progressTimer = null;
 const _progressEl = document.getElementById("progress-bar");
@@ -16,12 +14,6 @@ function getSettingsTabFromUrl() {
   const tab = params.get("tab") || "profile";
   return SETTINGS_TABS.includes(tab) ? tab : "profile";
 }
-
-export const PAGE_PATHS = {
-  overview: "/settings",
-  billing: "/settings?tab=billing",
-  settings: "/settings",
-};
 
 export function startProgress() {
   if (!_progressEl) return;
@@ -68,9 +60,6 @@ export function renderRoute() {
     }
 
     state.currentPageId = "page-dashboard";
-    els.pages?.forEach?.((page) => page.classList.toggle("active", page.id === "page-dashboard"));
-    closeMobileMenus();
-    closeAccountModal();
     window.scrollTo(0, 0);
 
     showDashboardView("settings", tab);

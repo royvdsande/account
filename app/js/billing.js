@@ -42,7 +42,7 @@ async function changePlan(statusTarget, planId, triggerButton) {
   }
 }
 
-export async function startCheckout(statusTarget = els.pricingStatus, planId = null, triggerButton = null) {
+export async function startCheckout(statusTarget = els.billingStatus, planId = null, triggerButton = null) {
   if (state.isPremiumUser && planId) {
     await changePlan(statusTarget, planId, triggerButton);
     return;
@@ -62,11 +62,7 @@ export async function startCheckout(statusTarget = els.pricingStatus, planId = n
     return;
   }
 
-  const checkoutButtons = [
-    triggerButton,
-    els.pricingCheckoutBtn,
-    els.modalCheckoutBtn,
-  ].filter(Boolean);
+  const checkoutButtons = [triggerButton].filter(Boolean);
   checkoutButtons.forEach((button) => setLoadingState(button, true));
   setStatus(statusTarget, "", "info");
 

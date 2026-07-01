@@ -28,11 +28,6 @@ function bindShellEvents() {
     }
   });
 
-  // Close mobile menu when clicking an anchor link inside it
-  document.querySelectorAll(".mobile-menu .mobile-menu-link").forEach((link) => {
-    link.addEventListener("click", () => closeMobileMenus());
-  });
-
   // Close mobile menu when resizing to desktop
   const mediaQuery = window.matchMedia("(min-width: 768px)");
   mediaQuery.addEventListener("change", (e) => {
@@ -40,36 +35,9 @@ function bindShellEvents() {
   });
 }
 
-function bindScrollActiveNav() {
-  const sectionMap = [
-    { el: document.querySelector("section.hero"), href: "/" },
-  ].filter((s) => s.el);
-  if (!sectionMap.length) return;
-
-  function setActive(href) {
-    document.querySelectorAll(".nav-links .nav-link, .mobile-menu .mobile-menu-link").forEach((el) => {
-      el.classList.toggle("nav-link-active", el.getAttribute("href") === href);
-    });
-  }
-
-  function onScroll() {
-    const scrollY = window.scrollY + window.innerHeight * 0.35;
-    let active = sectionMap[0];
-    for (const s of sectionMap) {
-      if (s.el.offsetTop <= scrollY) active = s;
-    }
-    setActive(active.href);
-  }
-
-  if (!sectionMap.length) return;
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-}
-
 state.currentPageId = "page-public";
 initFirebase();
 bindShellEvents();
-bindScrollActiveNav();
 onAuthStateChanged(state.auth, (user) => {
   state.currentUser = user && !user.isAnonymous ? user : null;
   updateAuthNavigation();

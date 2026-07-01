@@ -1,34 +1,10 @@
-import { state, BINAS_CONFIG } from "./state.js";
+import { state } from "./state.js";
 import { finishProgress } from "./router.js";
 import { els } from "./elements.js";
 import { getAvatarMarkup } from "./utils.js";
 import { renderBillingView } from "./billing.js";
 
 const SETTINGS_TABS = ["profile", "security", "billing"];
-
-export function updatePricingCards() {
-  const plans = BINAS_CONFIG?.plans || [];
-  plans.forEach((plan) => {
-    const priceEl = document.getElementById(`price-${plan.id}`);
-    const perEl = document.getElementById(`per-${plan.id}`);
-    if (!priceEl || !perEl) return;
-
-    if (state.currentBillingPeriod === "yearly") {
-      priceEl.textContent = `€ ${plan.yearlyPrice}`;
-      perEl.textContent = "/mo, billed yearly";
-    } else {
-      priceEl.textContent = `€ ${plan.monthlyPrice}`;
-      perEl.textContent = "/mo";
-    }
-  });
-}
-
-export function updatePricingCopy() {
-  state.currentBillingPeriod = "monthly";
-  els.pricingToggleMonthly?.classList.add("active");
-  els.pricingToggleYearly?.classList.remove("active");
-  updatePricingCards();
-}
 
 export function updateAuthNavigation() {
   document.querySelectorAll(".nav-auth-skeleton").forEach((node) => {
@@ -77,17 +53,6 @@ export function updateAccountSurfaces() {
   if (els.dashboardUserAvatar) els.dashboardUserAvatar.innerHTML = avatarMarkup;
   if (els.ctxUserName) els.ctxUserName.textContent = userName;
   if (els.ctxUserEmail) els.ctxUserEmail.textContent = userEmail;
-
-  if (els.pricingPlan) {
-    els.pricingPlan.textContent = state.isPremiumUser ? "Active subscription" : "Free account";
-  }
-  if (els.pricingCopy) {
-    els.pricingCopy.textContent = state.currentUser
-      ? state.isPremiumUser
-        ? "Your subscription is linked to this account."
-        : "Sign in to manage account billing."
-      : "Create an account or sign in to continue.";
-  }
 
   updateSettingsPage();
   [els.dashboardUserName, els.dashboardUserEmail, els.dashboardUserAvatar].forEach((el) => {

@@ -1,27 +1,6 @@
 import { state } from "./state.js";
 import { els } from "./elements.js";
 
-export function initSidebarState() {}
-export function toggleSidebarCollapse() {}
-
-export function closeMobileMenus() {
-  document.querySelectorAll(".mobile-menu").forEach((menu) => menu.classList.remove("open"));
-  document.querySelectorAll(".nav-burger").forEach((burger) => burger.classList.remove("open"));
-}
-
-export function openSidebar() {}
-export function closeSidebar() {}
-
-export function openAccountModal() {
-  els.accountModalShell?.classList.remove("hidden");
-  els.accountModalShell?.setAttribute("aria-hidden", "false");
-}
-
-export function closeAccountModal() {
-  els.accountModalShell?.classList.add("hidden");
-  els.accountModalShell?.setAttribute("aria-hidden", "true");
-}
-
 export function toggleAccountMenu() {
   const menu = els.dashboardAccountMenu;
   if (!menu) return;

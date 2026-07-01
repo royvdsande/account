@@ -1,11 +1,4 @@
 export const els = {
-  pages: document.querySelectorAll(".page"),
-  routeButtons: document.querySelectorAll("[data-route]"),
-  footerRoutes: document.querySelectorAll(".footer-route"),
-  mobileMenuLinks: document.querySelectorAll(".mobile-menu-link[data-route]"),
-  burgerButtons: document.querySelectorAll(".nav-burger"),
-  faqButtons: document.querySelectorAll(".faq-q"),
-
   signinForm: document.getElementById("signin-form"),
   signupForm: document.getElementById("signup-form"),
   signinEmail: document.getElementById("signin-email"),
@@ -23,16 +16,6 @@ export const els = {
   signinStatus: document.getElementById("signin-status"),
   signupStatus: document.getElementById("signup-status"),
 
-  pricingStatus: document.getElementById("pricing-status"),
-  pricingCheckoutBtn: document.getElementById("pricing-checkout-btn"),
-  pricingAccountButtons: document.querySelectorAll(".pricing-account-btn"),
-  pricingToggleMonthly: document.getElementById("toggle-monthly"),
-  pricingToggleYearly: document.getElementById("toggle-yearly"),
-  pricingPlan: document.getElementById("pricing-account-plan"),
-  pricingCopy: document.getElementById("pricing-account-copy"),
-  navOpenAccount: document.getElementById("nav-open-account"),
-  mobileOpenAccount: document.getElementById("mobile-open-account"),
-
   dashboardStatus: document.getElementById("dashboard-status"),
   dashboardUserTrigger: document.getElementById("dashboard-user-trigger"),
   dashboardAccountMenu: document.getElementById("dashboard-account-menu"),
@@ -44,19 +27,6 @@ export const els = {
   ctxUserName: document.getElementById("ctx-user-name"),
   ctxUserEmail: document.getElementById("ctx-user-email"),
   dashViews: document.querySelectorAll(".dash-view"),
-
-  accountModalShell: document.getElementById("account-modal-shell"),
-  accountModalBackdrop: document.getElementById("account-modal-backdrop"),
-  accountModalClose: document.getElementById("account-modal-close"),
-  modalStatus: document.getElementById("modal-status"),
-  modalCheckoutBtn: document.getElementById("modal-checkout-btn"),
-  modalDashboardBtn: document.getElementById("modal-dashboard-btn"),
-  modalLogoutBtn: document.getElementById("modal-logout-btn"),
-  modalUserName: document.getElementById("modal-user-name"),
-  modalUserEmail: document.getElementById("modal-user-email"),
-  modalAvatar: document.getElementById("modal-avatar"),
-  modalPlan: document.getElementById("modal-plan"),
-  modalPlanCopy: document.getElementById("modal-plan-copy"),
 
   billingStatus: document.getElementById("billing-status"),
   billingPlanName: document.getElementById("billing-plan-name"),

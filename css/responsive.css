@@ -3,7 +3,6 @@
     padding: 0 16px;
   }
 
-  .nav-links,
   .nav-actions {
     display: none;
   }
@@ -19,27 +18,5 @@
 
   .auth-card {
     padding: 24px 18px;
-  }
-
-  .pricing-hero {
-    padding: 48px 16px 30px;
-  }
-
-  .pricing-cards-wrap {
-    grid-template-columns: 1fr;
-    padding: 0 16px 12px;
-  }
-
-  .pricing-status-wrap,
-  .faq-section {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .toggle-btn {
-    padding: 7px 12px;
-    font-size: 13px;
   }
 }
